@@ -1,0 +1,75 @@
+# The following types define the data model of the example service
+# based on which the GraphQL API is generated
+
+type User @model {
+    id: ID! @isUnique
+    name: String
+    balance: Float @defaultvalue(value:0.0)
+    sessions:[Session!]! @relation(name:"SessionOnUser")
+    email: String! @isUnique
+    password: String!
+}
+type Mentor @model{
+    name: String
+    description: String
+    profession: String
+    id: ID! @isUnique
+    sessions:[Session!]! @relation(name:"SessionOnMentor")
+    earnings: Float @defaultvalue(value:0.0)
+    schedule:[Int!]
+    email: String! @isUnique
+    password: String!
+}
+type Session @model{
+    user: User! @relation(name:"SessionOnUser")
+    mentor: Mentor! @relation(name:"SessionOnMentor")
+    id: ID! @isUnique
+    tokboxID: String! @isUnique
+    date: DateTime!
+    files: [File!]! @relation(name:"FileOnSession")
+    messages: [Message!]! @relation(name:"MessageOnSession")
+}
+type Message @model{
+    id: ID! @isUnique
+    senderType: Int!
+    text: String!
+    session: Session! @relation(name:"MessageOnSession")
+    file: File @relation(name:"FileOnMessage")
+}
+
+type File @model {
+    id: ID! @isUnique
+    contentType: String!
+    createdAt: DateTime!
+    name: String!
+    secret: String! @isUnique
+    size: Int!
+    updatedAt: DateTime!
+    url: String! @isUnique
+    session: Session! @relation(name:"FileOnSession")
+    message: Message! @relation(name:"FileOnMessage")
+}
+# Uncomment the model below as well
+
+# type Post @model {
+#   id: ID! @isUnique
+#   title: String!
+#
+#   # Every relation also required a back-relation (to determine 1:1, 1:n or n:m)
+#   author: User! @relation(name: "UserPosts")
+# }
+
+
+# added by email-password template: (please uncomment)
+# type User @model {
+#   # Required system field:
+#   id: ID! @isUnique # read-only (managed by Graphcool)
+#
+#   # Optional system fields (remove if not needed):
+#   createdAt: DateTime! # read-only (managed by Graphcool)
+#   updatedAt: DateTime! # read-only (managed by Graphcool)
+#
+#   email: String! @isUnique
+#   password: String!
+# }
+#

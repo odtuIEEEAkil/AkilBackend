@@ -1,0 +1,8 @@
+type LoggedInMentorPayload {
+  id: ID!
+}
+
+extend type Query {
+  # return user data if request contains valid authentication token
+  loggedInMentor: LoggedInMentorPayload
+}
